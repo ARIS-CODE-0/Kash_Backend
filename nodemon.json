@@ -1,0 +1,5 @@
+{
+    "watch": ["app.js", "src/routes"],
+    "ignore": ["src/models", "src/test"]
+    
+}
