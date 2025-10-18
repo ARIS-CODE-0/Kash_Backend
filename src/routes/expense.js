@@ -3,11 +3,14 @@ const express = require("express");
 const router = express.Router();
 
 const Expense = require("../models/expense");
+const Category = require("../models/category");
+const { getTotal, getExpensesOfCategory, getExpensesOfAllCategories } = require("../utils/expensesUtils");
 
 router.get('/expenses', async (req,res) => {
    try {
-         const expenses = await Expense.find().populate("category");
+         const expenses = await Expense.find().populate("category").sort({ date: -1 });
          res.json(expenses);
+         //res.json([]);
    } catch (error) {
         console.error(error);
         res.status(500).send("erreur lors de la récuperation des données");
@@ -79,5 +82,31 @@ router.delete('/expense/:id', async (req,res) => {
         res.status(500).send("erreur lors de la suppression des données");
     }
 })
+
+router.get('/expenses/statistiques', async (req, res) => {
+  try {
+    const expenses = await Expense.find();
+    const categories = await Category.find();
+    const total = getTotal(expenses);
+
+    const chartData = await getExpensesOfAllCategories(categories);
+    
+    const data = {
+        totalAmount: total,
+        totalExpenses: expenses.length,
+        chartData: {
+            label: "Catégories",
+            labels: chartData.categories,
+            data: chartData.totals,
+            colors: chartData.colors
+        }
+    }
+
+    res.send(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erreur serveur");
+  }
+});
 
 module.exports = router

@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const Expense = require("./src/models/expense");
 const expenseRoute = require("./src/routes/expense");
@@ -11,6 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(morgan("dev"));
+app.use(cors())
 app.use(express.json());
 app.use(expenseRoute);
 app.use(categoryRoute);
