@@ -34,8 +34,9 @@ router.get('/expense/:id', async (req,res) => {
 
 router.post('/expense', async (req,res) => {
     try {
-        const expense = new Expense(req.body)
-        expense.save();
+        const newExpense = new Expense(req.body)
+        newExpense.save();
+        const expense = await Expense.findById(newExpense._id).populate('category')
 
         const data = {
           message: "Donnée crée",
