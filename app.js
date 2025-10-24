@@ -10,9 +10,20 @@ const { connectDB } = require("./src/config/db");
 
 const app = express();
 const port = process.env.PORT || 3000;
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173", // Vite par exemple
+  "https://votre-frontend-production.com",
+];
+
 
 app.use(morgan("dev"));
-app.use(cors())
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(expenseRoute);
 app.use(categoryRoute);
