@@ -35,7 +35,7 @@ router.get('/expense/:id', async (req,res) => {
 router.post('/expense', async (req,res) => {
     try {
         const newExpense = new Expense(req.body)
-        newExpense.save();
+        await newExpense.save();
         const expense = await Expense.findById(newExpense._id).populate('category')
 
         const data = {
