@@ -17,17 +17,23 @@ const allowedOrigins = [
 ];
 
 
+app.use( async (req, res, next) => {
+  await connectDB();
+  next();
+});
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(expenseRoute);
 app.use(categoryRoute);
 
-connectDB()
-
 app.get('/',(req,res) => {
     res.send('Kash is online');
 });
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+})
 
 
 
